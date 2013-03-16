@@ -8,6 +8,7 @@ https://github.com/olt/thinplatespline
 And also it uses code from the GDAL Warp API, but there is no dependency to GDAL.
 
 ::
+
   var tps = new ThinPlateSpline();
   
   tps.push_points([
