@@ -46,9 +46,7 @@ And also it uses code from the GDAL Warp API, but there is no dependency to GDAL
   +--------+--------------+------------------+----------------------+
   | Points | 33KB         | 690ms            | 40s                  |
   +--------+--------------+------------------+----------------------+
-  | Serial | 12.3MB       | 995ms            | a second             |
+  | Serial | 3.6MB        | 995ms            | a second             |
   +--------+--------------+------------------+----------------------+
   After spawn solved instance, transformation works very quickly.
-   
-  Now, serial format is based on json, but if change to use another format (like MessagePack, Raw binary or so),
-  It will become more and more tiny (Future work).
+  Serial data format is binary.
