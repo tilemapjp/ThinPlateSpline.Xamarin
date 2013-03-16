@@ -1,25 +1,53 @@
-TPS
+ThinPlateSpline.js
 ===
 
-MIT licensed Python library to create Thin-Plate-Splines from control points.
+MIT licensed JavaScript library to create Thin-Plate-Splines from control points.
 
-It uses code from the GDAL Warp API, but there is no dependency to GDAL.
+Based on python Thin-Plate-Splines library,
+https://github.com/olt/thinplatespline
+And also it uses code from the GDAL Warp API, but there is no dependency to GDAL.
 
 ::
-
-  >>> from tps import from_control_points
-
-  >>> t = from_control_points([
-  ...   (0, 0, 50, 50),
-  ...   (10, 10, 100, 100),
-  ...   (0, 10, 70, 100)])
-  >>> t.transform(4, 5)
-  (72.0, 75.0)
-
-  >>> t = from_control_points([
-  ...   (0, 0, 50, 50),
-  ...   (10, 10, 100, 100),
-  ...   (0, 10, 70, 100)],
-  ...   backwards=True)
-  >>> t.transform(72, 75)
-  (4.0, 5.0)
+  var tps = new ThinPlateSpline();
+  
+  tps.push_points([
+    [[100,100], [200, 200]],
+    [[200,200], [400, 400]],
+    [[150,150], [320, 350]]
+  ]);
+  
+  tps.solve();
+  
+  //Forward transform
+  var ord = tps.transform([160, 160], false);
+  //ord => [336, 360]
+  
+  //Backward transform
+  var rev = tps.transform(ord, true);
+  //rev => [160, 160]
+  
+  //Solving thin-Plate-Spline from many points by scrach takes too many time.
+  //So, there are object-serialization method to store solved instance.
+  
+  var serial = tps.serialize();
+  
+  var tps2 = new ThinPlateSpline();
+  tps2.deserialize(serial);
+  
+  var ord2 = tps2.transform([160, 160], false);
+  var rev2 = tps2.transform(ord2, true);
+  //Same results with ord, rev
+  
+  //Rough comparison between Solving row points and Loading solved serial object  
+  //Number of points: 328, in Chrome, from AWS EC2 via FTTH 
+  +--------+--------------+------------------+----------------------+
+  | Data   | Size of Data | Downloading time | Solving/Loading time |
+  +--------+--------------+------------------+----------------------+
+  | Points | 33KB         | 690ms            | 40s                  |
+  +--------+--------------+------------------+----------------------+
+  | Serial | 12.3MB       | 995ms            | a second             |
+  +--------+--------------+------------------+----------------------+
+  After spawn solved instance, transformation works very quickly.
+   
+  Now, serial format is based on json, but if change to use another format (like MessagePack, Raw binary or so),
+  It will become more and more tiny (Future work).
