@@ -97,10 +97,11 @@ if (typeof importScripts === 'function') {
       case 'load_serial':
         var xhr = new XMLHttpRequest();
         xhr.open('GET', data, true);
+        xhr.responseType = 'arraybuffer';
 
         xhr.onload = function(e) {
           if (this.status == 200) {
-            var serial = JSON.parse(this.response);
+            var serial = new Uint8Array(this.response);
             self.postMessage({'event':'serialized','serial':serial});
           } else {
             self.postMessage({'event':'cannotLoad'});

@@ -119,10 +119,11 @@ ThinPlateSpline.prototype.load_serial = function(url) {
   } else {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);
+    xhr.responseType = 'arraybuffer';
 
     xhr.onload = function(e) {
       if (this.status == 200) {
-        var serial = JSON.parse(this.response);
+        var serial = new Uint8Array(this.response);
         me.deserialize(serial);
       } else {
         //self.postMessage({'event':'cannotLoad'});
@@ -7685,7 +7686,7 @@ if (shouldRunNow) {
 return ThinPlateSpline;
 })();
 
-var tps = new ThinPlateSpline();
+/*var tps = new ThinPlateSpline();
 tps.add_point([100,100], [200, 200]);
 tps.add_point([200,200], [400, 400]);
 tps.add_point([150,150], [320, 350]);
@@ -7781,10 +7782,11 @@ if (typeof importScripts === 'function') {
       case 'load_serial':
         var xhr = new XMLHttpRequest();
         xhr.open('GET', data, true);
+        xhr.responseType = 'arraybuffer';
 
         xhr.onload = function(e) {
           if (this.status == 200) {
-            var serial = JSON.parse(this.response);
+            var serial = new Uint8Array(this.response);
             self.postMessage({'event':'serialized','serial':serial});
           } else {
             self.postMessage({'event':'cannotLoad'});

@@ -119,10 +119,11 @@ ThinPlateSpline.prototype.load_serial = function(url) {
   } else {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);
+    xhr.responseType = 'arraybuffer';
 
     xhr.onload = function(e) {
       if (this.status == 200) {
-        var serial = JSON.parse(this.response);
+        var serial = new Uint8Array(this.response);
         me.deserialize(serial);
       } else {
         //self.postMessage({'event':'cannotLoad'});
