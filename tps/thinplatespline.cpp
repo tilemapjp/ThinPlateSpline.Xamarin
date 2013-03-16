@@ -538,7 +538,7 @@ int VizGeorefSpline2D::serialize_size()
     return alloc_size;
 }
 
-int VizGeorefSpline2D::serialize(char* serial) 
+char* VizGeorefSpline2D::serialize(char* serial) 
 {
     int  i_size     = sizeof(int);
     int  v_size     = sizeof(vizGeorefInterType);
@@ -597,10 +597,10 @@ int VizGeorefSpline2D::serialize(char* serial)
         }
     }
 
-    return alloc_size;
+    return work;
 }
 
-int VizGeorefSpline2D::deserialize(char* serial) 
+char* VizGeorefSpline2D::deserialize(char* serial) 
 {
     int  i_size     = sizeof(int);
     int  v_size     = sizeof(vizGeorefInterType);
@@ -694,7 +694,7 @@ int VizGeorefSpline2D::deserialize(char* serial)
         }
     }
 
-    return alloc_size;
+    return work;
 }
 
 int matrixInvert( int N, double input[], double output[] )

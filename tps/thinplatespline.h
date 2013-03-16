@@ -79,8 +79,8 @@ class VizGeorefSpline2D
     int solve(void);
 
     int serialize_size();
-    int serialize(char* serial);
-    int deserialize(char* serial);
+    char* serialize(char* serial);
+    char* deserialize(char* serial);
 
   private:	
     double base_func( const double x1, const double y1,

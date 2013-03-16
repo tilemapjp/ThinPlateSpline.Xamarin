@@ -1,7 +1,6 @@
 # Edit for your paths
 EMSCRIPTEN=~/Dev/emscripten
-EMCC=$(EMSCRIPTEN)/emcc 
-#-O2
+EMCC=$(EMSCRIPTEN)/emcc -O2
 # -s INLINING_LIMIT=0
 
 all: thinplatespline.js 

@@ -232,31 +232,23 @@ ThinPlateSpline.prototype.__get_point = function(self, P) {
 
 ThinPlateSpline.prototype.serialize = function() {
   var alloc_size = this.serialize_size();
-  var ord_serial = _malloc(alloc_size[0]+1);
-  var rev_serial = _malloc(alloc_size[1]+1);
-  //__ZN17VizGeorefSpline2D9serializeEPc(this.__ord.pointer, ord_serial);
-  //__ZN17VizGeorefSpline2D9serializeEPc(this.__rev.pointer, rev_serial);
-  Module['ccall']('_ZN17VizGeorefSpline2D9serializeEPc', 'void', ['number', 'number'], [this.__ord.pointer, ord_serial]);
-  Module['ccall']('_ZN17VizGeorefSpline2D9serializeEPc', 'void', ['number', 'number'], [this.__rev.pointer, rev_serial]);
+  var all_size   = alloc_size[0] + alloc_size[1] + 2;
+  var serial_ptr = _malloc(all_size);
+  var work_ptr   = serial_ptr;
 
-  var ret = [{binary:[],solved:this.__ord.solved},{binary:[],solved:this.__rev.solved}];
-  var bin = ret[0]['binary'];
-  for (var i=0,len=alloc_size[0];i<len;i++) {
-    bin[i] = HEAP8[ord_serial+i];
-  }
-  bin     = ret[1]['binary'];
-  for (i=0,len=alloc_size[1];i<len;i++) {
-    bin[i] = HEAP8[rev_serial+i];
-  }
+  work_ptr = Module['ccall']('_ZN17VizGeorefSpline2D9serializeEPc', 'void', ['number', 'number'], [this.__ord.pointer, work_ptr]);
+  Module.setValue(work_ptr, this.__ord.solved ? 1 : 0, 'i8');
+  work_ptr++;
 
-  _free(ord_serial);
-  _free(rev_serial);
+  work_ptr = Module['ccall']('_ZN17VizGeorefSpline2D9serializeEPc', 'void', ['number', 'number'], [this.__rev.pointer, work_ptr]);
+  Module.setValue(work_ptr, this.__rev.solved ? 1 : 0, 'i8');
+  work_ptr++;
+
+  var ret = new Uint8Array(new Uint8Array(HEAPU8.buffer, serial_ptr, all_size));
+
+  _free(serial_ptr);
 
   return ret;
-};
-
-ThinPlateSpline.prototype.serialize2 = function() {
-  return msgpack.pack(this.serialize());
 };
 
 ThinPlateSpline.prototype.deserialize = function(serial) {
@@ -264,63 +256,22 @@ ThinPlateSpline.prototype.deserialize = function(serial) {
   if (this.worker) {
     this.worker.postMessage({'method':'deserialize','data':serial});
   } else {
-    var ord_bin    = serial[0]['binary'];
-    var rev_bin    = serial[1]['binary'];
-    var ord_size   = ord_bin.length;
-    var rev_size   = rev_bin.length;
-    var ord_serial = _malloc(ord_size);
-    var rev_serial = _malloc(rev_size);
+    var all_size   = serial.length;
+    var serial_ptr = _malloc(all_size);
+    var work_ptr   = serial_ptr;
 
-    /*var ord_i = 0;
-    var rev_i = 0;
-    var ord_f = function() {
-      HEAP8[ord_serial+ord_i] = ord_bin[ord_i];
-      ord_i++;
-      if (ord_i < ord_size) {
-        setTimeout(ord_f,1);
-      } else {
-        __ZN17VizGeorefSpline2D11deserializeEPc(me.__ord.pointer, ord_serial);
-        me.__ord.solved = serial[0]['solved'];
-        _free(ord_serial);
-      }
-    };
+    HEAPU8.set(serial, serial_ptr);
 
-    var rev_f = function() {
-      HEAP8[rev_serial+rev_i] = rev_bin[rev_i];
-      rev_i++;
-      if (rev_i < rev_size) {
-        setTimeout(rev_f,1);
-      } else {
-        __ZN17VizGeorefSpline2D11deserializeEPc(me.__rev.pointer, rev_serial);
-        me.__rev.solved = serial[1]['solved'];
-        _free(rev_serial);
-      }
-    };
-    ord_f();
-    rev_f();*/
+    work_ptr = Module['ccall']('_ZN17VizGeorefSpline2D11deserializeEPc', 'void', ['number', 'number'], [this.__ord.pointer, work_ptr]);
+    this.__ord.solved = Module.getValue(work_ptr, 'i8') ? true : false;
+    work_ptr++;
 
-    for (var i=0,len=ord_size;i<len;i++) {
-      HEAP8[ord_serial+i] = ord_bin[i];
-    }
-    for (i=0,len=rev_size;i<len;i++) {
-      HEAP8[rev_serial+i] = rev_bin[i];
-    }
+    work_ptr = Module['ccall']('_ZN17VizGeorefSpline2D11deserializeEPc', 'void', ['number', 'number'], [this.__rev.pointer, work_ptr]);
+    this.__rev.solved = Module.getValue(work_ptr, 'i8') ? true : false;
+    work_ptr++;
 
-    //__ZN17VizGeorefSpline2D11deserializeEPc(this.__ord.pointer, ord_serial);
-    //__ZN17VizGeorefSpline2D11deserializeEPc(this.__rev.pointer, rev_serial);
-    Module['ccall']('_ZN17VizGeorefSpline2D11deserializeEPc', 'void', ['number', 'number'], [this.__ord.pointer, ord_serial]);
-    Module['ccall']('_ZN17VizGeorefSpline2D11deserializeEPc', 'void', ['number', 'number'], [this.__rev.pointer, rev_serial]);
-
-    this.__ord.solved = serial[0]['solved'];
-    this.__rev.solved = serial[1]['solved'];
-
-    _free(ord_serial);
-    _free(rev_serial);
+    _free(serial_ptr);
   }
-};
-
-ThinPlateSpline.prototype.deserialize2 = function(serial) {
-  this.deserialize(msgpack.unpack(serial));
 };
 
 ThinPlateSpline.prototype.serialize_size = function() {
