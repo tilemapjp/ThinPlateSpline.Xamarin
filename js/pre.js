@@ -14,8 +14,8 @@ function ThinPlateSpline(options) {
   this.isWorker = false;
   var me     = this;
 
-  Module['ccall']('_ZN17VizGeorefSpline2DC1Ei', 'void', ['number', 'number'], [this.__ord.pointer, 2]);
-  Module['ccall']('_ZN17VizGeorefSpline2DC1Ei', 'void', ['number', 'number'], [this.__rev.pointer, 2]);
+  Module['ccall']('_ZN17VizGeorefSpline2DC2Ei', 'void', ['number', 'number'], [this.__ord.pointer, 2]);
+  Module['ccall']('_ZN17VizGeorefSpline2DC2Ei', 'void', ['number', 'number'], [this.__rev.pointer, 2]);
 
   if (options.use_worker) {
     var root = '';
@@ -27,6 +27,7 @@ function ThinPlateSpline(options) {
       if (match) {
         root = match[1];
         min  = match[2];
+        if (min === undefined) min = "";
         break;
       }
     }
@@ -67,8 +68,8 @@ function ThinPlateSpline(options) {
 }
 
 ThinPlateSpline.prototype.destructor = function() {
-  Module['ccall']('_ZN17VizGeorefSpline2DD1Ev', 'void', ['number'], [this.__ord.pointer]);
-  Module['ccall']('_ZN17VizGeorefSpline2DD1Ev', 'void', ['number'], [this.__rev.pointer]);
+  Module['ccall']('_ZN17VizGeorefSpline2DD2Ev', 'void', ['number'], [this.__ord.pointer]);
+  Module['ccall']('_ZN17VizGeorefSpline2DD2Ev', 'void', ['number'], [this.__rev.pointer]);
   Module['ccall']('_ZdlPv', 'void', ['number'], [this.__ord.pointer]);
   Module['ccall']('_ZdlPv', 'void', ['number'], [this.__rev.pointer]);
 };
