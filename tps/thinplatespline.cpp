@@ -31,6 +31,7 @@
  ****************************************************************************/
 
 #include "thinplatespline.h"
+//#include <emscripten/bind.h>
 
 #ifdef HAVE_FLOAT_H
 #  include <float.h>
@@ -831,3 +832,15 @@ int matrixInvert( int N, double input[], double output[] )
     delete [] temp;       // free memory
     return true;
 }
+
+/*EMSCRIPTEN_BINDINGS(thinplatespline) {
+    emscripten::class_<VizGeorefSpline2D>("_TPS")
+        .constructor<int>()
+        .function("add_point", &VizGeorefSpline2D::add_point, emscripten::allow_raw_pointers())
+        .function("solve", &VizGeorefSpline2D::solve)
+        .function("get_point", &VizGeorefSpline2D::get_point, emscripten::allow_raw_pointers())
+        .function("serialize_size", &VizGeorefSpline2D::serialize_size)
+        .function("serialize", &VizGeorefSpline2D::serialize, emscripten::allow_raw_pointers())
+        .function("deserialize", &VizGeorefSpline2D::deserialize, emscripten::allow_raw_pointers())
+        ;
+}*/
