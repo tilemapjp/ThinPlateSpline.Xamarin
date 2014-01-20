@@ -2,11 +2,11 @@ var ThinPlateSpline = (function(){
 function ThinPlateSpline(options) {
   if (!options) { options = {}; }
   this.__ord = {
-    pointer : Runtime.stackAlloc(104),
+    pointer : Runtime.stackAlloc(150),
     solved  : false
   };
   this.__rev = {
-    pointer : Runtime.stackAlloc(104),
+    pointer : Runtime.stackAlloc(150),
     solved  : false
   };
   this.isWorker = false;
@@ -1160,7 +1160,7 @@ var DYNAMIC_BASE = 0, DYNAMICTOP = 0; // dynamic area handled by sbrk
 function enlargeMemory() {
   abort('Cannot enlarge memory arrays in asm.js. Either (1) compile with -s TOTAL_MEMORY=X with X higher than the current value ' + TOTAL_MEMORY + ', or (2) set Module.TOTAL_MEMORY before the program runs.');
 }
-var TOTAL_STACK = Module['TOTAL_STACK'] || 5242880;
+var TOTAL_STACK = Module['TOTAL_STACK'] || 10000000;
 var TOTAL_MEMORY = Module['TOTAL_MEMORY'] || 16777216;
 var FAST_MEMORY = Module['FAST_MEMORY'] || 2097152;
 var totalMemory = 4096;
@@ -4941,7 +4941,7 @@ Module["requestFullScreen"] = function Module_requestFullScreen(lockPointer, res
   Module["getUserMedia"] = function Module_getUserMedia() { Browser.getUserMedia() }
 STACK_BASE = STACKTOP = Runtime.alignMemory(STATICTOP);
 staticSealed = true; // seal the static portion of memory
-STACK_MAX = STACK_BASE + 5242880;
+STACK_MAX = STACK_BASE + 10000000;
 DYNAMIC_BASE = DYNAMICTOP = Runtime.alignMemory(STACK_MAX);
 assert(DYNAMIC_BASE < TOTAL_MEMORY, "TOTAL_MEMORY not big enough for stack");
 var Math_min = Math.min;

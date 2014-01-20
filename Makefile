@@ -1,6 +1,7 @@
 # Edit for your paths
 EMSCRIPTEN=~/emscripten
-EMCC=$(EMSCRIPTEN)/emcc -O2 
+# -s SAFE_DYNCALLS=1 -O0 -g2 -s ASSERTIONS=1 -s ALIASING_FUNCTION_POINTERS=0
+EMCC=$(EMSCRIPTEN)/emcc -O2 -s TOTAL_STACK=10000000
 #JS_COMPILER = java -Xmx512M -jar lib/google-compiler/compiler.jar --charset UTF-8
 
 all: thinplatespline.js

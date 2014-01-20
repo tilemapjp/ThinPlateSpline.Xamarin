@@ -4,11 +4,11 @@ function ThinPlateSpline(options) {
   if (!options) { options = {}; }
 
   this.__ord = {
-    pointer : Runtime.stackAlloc(104),
+    pointer : Runtime.stackAlloc(150),
     solved  : false
   };
   this.__rev = {
-    pointer : Runtime.stackAlloc(104),
+    pointer : Runtime.stackAlloc(150),
     solved  : false
   };
   this.isWorker = false;
