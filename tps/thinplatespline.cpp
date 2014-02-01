@@ -101,6 +101,10 @@ int VizGeorefSpline2D::get_nof_points(){
     return _nof_points;
 }
 
+int VizGeorefSpline2D::get_object_size(){
+    return sizeof(VizGeorefSpline2D);
+}
+
 void VizGeorefSpline2D::set_toler( double tx, double ty ){
     _tx = tx;
     _ty = ty;

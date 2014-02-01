@@ -3,12 +3,16 @@ var ThinPlateSpline = (function(){
 function ThinPlateSpline(options) {
   if (!options) { options = {}; }
 
+  var obj_size = Module['ccall']('_ZN17VizGeorefSpline2D15get_object_sizeEv', 'number', [], []);
+
+  console.log("Object size: " + obj_size);
+
   this.__ord = {
-    pointer : Runtime.stackAlloc(150),
+    pointer : Runtime.stackAlloc(obj_size),
     solved  : false
   };
   this.__rev = {
-    pointer : Runtime.stackAlloc(150),
+    pointer : Runtime.stackAlloc(obj_size),
     solved  : false
   };
   this.isWorker = false;

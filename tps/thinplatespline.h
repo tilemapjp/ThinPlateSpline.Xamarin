@@ -62,6 +62,7 @@ class VizGeorefSpline2D
     VizGeorefSpline2D(int nof_vars = 1);
     ~VizGeorefSpline2D();
     int get_nof_points();
+    static int get_object_size();
     void set_toler( double tx, double ty );
     void get_toler( double& tx, double& ty);
     vizGeorefInterType get_interpolation_type ( );
