@@ -5,8 +5,6 @@ function ThinPlateSpline(options) {
 
   var obj_size = Module['ccall']('_ZN17VizGeorefSpline2D15get_object_sizeEv', 'number', [], []);
 
-  console.log("Object size: " + obj_size);
-
   this.__ord = {
     pointer : Runtime.stackAlloc(obj_size),
     solved  : false
