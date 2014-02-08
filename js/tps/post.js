@@ -1,3 +1,8 @@
+
+//Globalに公開
+var global = (function() {return this})();
+global['ThinPlateSpline'] = ThinPlateSpline;
+
 return ThinPlateSpline;
 })();
 
