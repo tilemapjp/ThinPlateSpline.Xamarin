@@ -1,5 +1,45 @@
-*.pyc
-*.egg-info
-dist
-.DS_Store
-c_src/proj-4.8.0
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+,/
+dist/
+log/
+install/
+
+# Toolchain
+android-*-toolchain-*
+
+# tarball
+*.tar.gz
+
+# Xamarin
+GDAL*/obj/
+GDAL*/bin/
+OSGeo.GDAL*/obj/
+OSGeo.GDAL*/bin/
