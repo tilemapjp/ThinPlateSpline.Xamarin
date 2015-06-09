@@ -41,31 +41,31 @@
 
 typedef enum
 {
-	VIZ_GEOREF_SPLINE_ZERO_POINTS,
-	VIZ_GEOREF_SPLINE_ONE_POINT,
-	VIZ_GEOREF_SPLINE_TWO_POINTS,
-	VIZ_GEOREF_SPLINE_ONE_DIMENSIONAL,
-	VIZ_GEOREF_SPLINE_FULL,
+	THINPLATE_SPLINE_ZERO_POINTS,
+	THINPLATE_SPLINE_ONE_POINT,
+	THINPLATE_SPLINE_TWO_POINTS,
+	THINPLATE_SPLINE_ONE_DIMENSIONAL,
+	THINPLATE_SPLINE_FULL,
 	
-	VIZ_GEOREF_SPLINE_POINT_WAS_ADDED,
-	VIZ_GEOREF_SPLINE_POINT_WAS_DELETED
+	THINPLATE_SPLINE_POINT_WAS_ADDED,
+	THINPLATE_SPLINE_POINT_WAS_DELETED
 
-} vizGeorefInterType;
+} ThinPlateSplineInterType;
 
-//#define VIZ_GEOREF_SPLINE_MAX_POINTS 40
-#define VIZGEOREF_MAX_VARS 2
+//#define THINPLATE_SPLINE_MAX_POINTS 40
+#define THINPLATE_SPLINE_MAX_VARS 2
 
-class VizGeorefSpline2D
+class ThinPlateSpline
 {
   public:
 
-    VizGeorefSpline2D(int nof_vars = 1);
-    ~VizGeorefSpline2D();
+    ThinPlateSpline(int nof_vars = 1);
+    ~ThinPlateSpline();
     int get_nof_points();
     static int get_object_size();
     void set_toler( double tx, double ty );
     void get_toler( double& tx, double& ty);
-    vizGeorefInterType get_interpolation_type ( );
+    ThinPlateSplineInterType get_interpolation_type ( );
 
     void dump_data_points();
     int delete_list();
@@ -87,7 +87,7 @@ class VizGeorefSpline2D
     double base_func( const double x1, const double y1,
                       const double x2, const double y2 );
 
-    vizGeorefInterType type;
+    ThinPlateSplineInterType type;
 
     int _nof_vars;
     int _nof_points;
@@ -98,17 +98,17 @@ class VizGeorefSpline2D
     double _ta;
     double _dx, _dy;
 
-    double *x; // [VIZ_GEOREF_SPLINE_MAX_POINTS+3];
-    double *y; // [VIZ_GEOREF_SPLINE_MAX_POINTS+3];
+    double *x; // [THINPLATE_SPLINE_MAX_POINTS+3];
+    double *y; // [THINPLATE_SPLINE_MAX_POINTS+3];
 
-//    double rhs[VIZ_GEOREF_SPLINE_MAX_POINTS+3][VIZGEOREF_MAX_VARS];
-//    double coef[VIZ_GEOREF_SPLINE_MAX_POINTS+3][VIZGEOREF_MAX_VARS];
-    double *rhs[VIZGEOREF_MAX_VARS];
-    double *coef[VIZGEOREF_MAX_VARS];
+//    double rhs[THINPLATE_SPLINE_MAX_POINTS+3][THINPLATE_SPLINE_MAX_VARS];
+//    double coef[THINPLATE_SPLINE_MAX_POINTS+3][THINPLATE_SPLINE_MAX_VARS];
+    double *rhs[THINPLATE_SPLINE_MAX_VARS];
+    double *coef[THINPLATE_SPLINE_MAX_VARS];
 
-    double *u; // [VIZ_GEOREF_SPLINE_MAX_POINTS];
-    int *unused; // [VIZ_GEOREF_SPLINE_MAX_POINTS];
-    int *index; // [VIZ_GEOREF_SPLINE_MAX_POINTS];
+    double *u; // [THINPLATE_SPLINE_MAX_POINTS];
+    int *unused; // [THINPLATE_SPLINE_MAX_POINTS];
+    int *index; // [THINPLATE_SPLINE_MAX_POINTS];
 	
     double *_AA, *_Ainv;
 };

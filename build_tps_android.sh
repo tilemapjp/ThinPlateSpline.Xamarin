@@ -114,4 +114,7 @@ export CXXCPP="${CPP}"
  
 echo CFLAGS ${CFLAGS}
  
-${CXX}  ${CXXFLAGS} -shared -fPIC -o ${prefix}/libthinplatespline.so tps_c/thinplatespline.cpp 
+${CXX} ${CXXFLAGS} -c -fPIC -I. tps_c/thinplatespline.cpp -o ${prefix}/thinplatespline.o
+${CXX} ${CXXFLAGS} -c -fPIC -I. swig/ThinPlateSpline_wrap.cxx -o ${prefix}/ThinPlateSpline_wrap.o 
+${CC} -shared -Wl,-soname,libthinplatespline.so.1 -I. -o ${prefix}/libthinplatespline.so ${prefix}/thinplatespline.o ${prefix}/ThinPlateSpline_wrap.o
+rm ${prefix}/*.o

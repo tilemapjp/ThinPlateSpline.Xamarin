@@ -95,7 +95,14 @@ export CXX=`xcrun -find -sdk iphoneos g++`
 export CXXFLAGS="${CFLAGS}"
 export CPP=`xcrun -find -sdk iphoneos cpp`
 export CXXCPP="${CPP}"
+export AR=`xcrun -find -sdk iphoneos ar`
+export RANLIB=`xcrun -find -sdk iphoneos ranlib`
+#export STRIP=`xcrun -find -sdk iphoneos strip`
  
 echo CFLAGS ${CFLAGS}
  
-${CXX} ${CXXFLAGS} -c -fPIC -o ${prefix}/libthinplatespline.a tps_c/thinplatespline.cpp 
+${CXX} ${CXXFLAGS} -c -I. tps_c/thinplatespline.cpp -o ${prefix}/thinplatespline.o
+${CXX} ${CXXFLAGS} -c -I. swig/ThinPlateSpline_wrap.cxx -o ${prefix}/ThinPlateSpline_wrap.o
+${AR} -rcs ${prefix}/libthinplatespline.a ${prefix}/thinplatespline.o ${prefix}/ThinPlateSpline_wrap.o
+${RANLIB} ${prefix}/libthinplatespline.a
+rm ${prefix}/*.o

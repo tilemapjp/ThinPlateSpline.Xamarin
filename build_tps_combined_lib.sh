@@ -23,6 +23,10 @@ mkdir -p ${PREFIX}
 mkdir -p ${IOS_DIST}
 mkdir -p ${AND_DIST}
 
+#for swig
+
+swig -c++ -csharp swig/ThinPlateSpline.i
+
 #for iOS
 
 export IPHONEOS_DEPLOYMENT_TARGET=7.1

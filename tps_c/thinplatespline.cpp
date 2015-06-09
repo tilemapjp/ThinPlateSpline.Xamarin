@@ -44,22 +44,22 @@
 #  define FLT_MIN 1e-37
 #endif
 
-VizGeorefSpline2D* viz_xy2llz;
-VizGeorefSpline2D* viz_llz2xy;
+ThinPlateSpline* viz_xy2llz;
+ThinPlateSpline* viz_llz2xy;
 
 /////////////////////////////////////////////////////////////////////////////////////
-//// vizGeorefSpline2D
+//// ThinPlateSpline
 /////////////////////////////////////////////////////////////////////////////////////
 
 #define A(r,c) _AA[ _nof_eqs * (r) + (c) ]
 #define Ainv(r,c) _Ainv[ _nof_eqs * (r) + (c) ]
 
 
-#define VIZ_GEOREF_SPLINE_DEBUG 0
+#define THINPLATE_SPLINE_DEBUG 0
 
 int matrixInvert( int N, double input[], double output[] );
 
-VizGeorefSpline2D::VizGeorefSpline2D(int nof_vars){
+ThinPlateSpline::ThinPlateSpline(int nof_vars){
     x = y = u = NULL;
     unused = index = NULL;
     for( int i = 0; i < nof_vars; i++ )
@@ -76,10 +76,10 @@ VizGeorefSpline2D::VizGeorefSpline2D(int nof_vars){
     _AA = NULL;
     _Ainv = NULL;
     grow_points();
-    type = VIZ_GEOREF_SPLINE_ZERO_POINTS;
+    type = THINPLATE_SPLINE_ZERO_POINTS;
 }
 
-VizGeorefSpline2D::~VizGeorefSpline2D(){
+ThinPlateSpline::~ThinPlateSpline(){
     if ( _AA )
         free(_AA);
     if ( _Ainv )
@@ -97,29 +97,29 @@ VizGeorefSpline2D::~VizGeorefSpline2D(){
     }
 }
 
-int VizGeorefSpline2D::get_nof_points(){
+int ThinPlateSpline::get_nof_points(){
     return _nof_points;
 }
 
-int VizGeorefSpline2D::get_object_size(){
-    return sizeof(VizGeorefSpline2D);
+int ThinPlateSpline::get_object_size(){
+    return sizeof(ThinPlateSpline);
 }
 
-void VizGeorefSpline2D::set_toler( double tx, double ty ){
+void ThinPlateSpline::set_toler( double tx, double ty ){
     _tx = tx;
     _ty = ty;
 }
 
-void VizGeorefSpline2D::get_toler( double& tx, double& ty) {
+void ThinPlateSpline::get_toler( double& tx, double& ty) {
     tx = _tx;
     ty = _ty;
 }
 
-vizGeorefInterType VizGeorefSpline2D::get_interpolation_type ( ){
+ThinPlateSplineInterType ThinPlateSpline::get_interpolation_type ( ){
     return type;
 }
 
-void VizGeorefSpline2D::dump_data_points()
+void ThinPlateSpline::dump_data_points()
 {
     for ( int i = 0; i < _nof_points; i++ )
     {
@@ -130,10 +130,10 @@ void VizGeorefSpline2D::dump_data_points()
     }
 }
 
-int VizGeorefSpline2D::delete_list()
+int ThinPlateSpline::delete_list()
 {
     _nof_points = 0;
-    type = VIZ_GEOREF_SPLINE_ZERO_POINTS;
+    type = THINPLATE_SPLINE_ZERO_POINTS;
     if ( _AA )
     {
         free(_AA);
@@ -147,9 +147,9 @@ int VizGeorefSpline2D::delete_list()
     return _nof_points;
 }
 
-void VizGeorefSpline2D::reset(void) { _nof_points = 0; }
+void ThinPlateSpline::reset(void) { _nof_points = 0; }
 
-void VizGeorefSpline2D::grow_points()
+void ThinPlateSpline::grow_points()
 
 {
     int new_max = _max_nof_points*2 + 2 + 3;
@@ -162,7 +162,7 @@ void VizGeorefSpline2D::grow_points()
         u = (double *) malloc( sizeof(double) * new_max );
         unused = (int *) malloc( sizeof(int) * new_max );
         index = (int *) malloc( sizeof(int) * new_max );
-        for( i = 0; i < VIZGEOREF_MAX_VARS; i++ )
+        for( i = 0; i < THINPLATE_SPLINE_MAX_VARS; i++ )
         {
             rhs[i] = (double *) calloc( sizeof(double), new_max );
             coef[i] = (double *) calloc( sizeof(double), new_max );
@@ -175,7 +175,7 @@ void VizGeorefSpline2D::grow_points()
         u = (double *) realloc( u, sizeof(double) * new_max );
         unused = (int *) realloc( unused, sizeof(int) * new_max );
         index = (int *) realloc( index, sizeof(int) * new_max );
-        for( i = 0; i < VIZGEOREF_MAX_VARS; i++ )
+        for( i = 0; i < THINPLATE_SPLINE_MAX_VARS; i++ )
         {
             rhs[i] = (double *)
                 realloc( rhs[i], sizeof(double) * new_max );
@@ -187,9 +187,9 @@ void VizGeorefSpline2D::grow_points()
     _max_nof_points = new_max - 3;
 }
 
-int VizGeorefSpline2D::add_point( const double Px, const double Py, const double *Pvars )
+int ThinPlateSpline::add_point( const double Px, const double Py, const double *Pvars )
 {
-    type = VIZ_GEOREF_SPLINE_POINT_WAS_ADDED;
+    type = THINPLATE_SPLINE_POINT_WAS_ADDED;
     int i;
 
     if( _nof_points == _max_nof_points )
@@ -205,7 +205,7 @@ int VizGeorefSpline2D::add_point( const double Px, const double Py, const double
     return 1;
 }
 
-bool VizGeorefSpline2D::change_point(int index, double Px, double Py, double* Pvars)
+bool ThinPlateSpline::change_point(int index, double Px, double Py, double* Pvars)
 {
     if ( index < _nof_points )
     {
@@ -219,7 +219,7 @@ bool VizGeorefSpline2D::change_point(int index, double Px, double Py, double* Pv
     return( true );
 }
 
-bool VizGeorefSpline2D::get_xy(int index, double& outX, double& outY)
+bool ThinPlateSpline::get_xy(int index, double& outX, double& outY)
 {
     bool ok;
 
@@ -238,7 +238,7 @@ bool VizGeorefSpline2D::get_xy(int index, double& outX, double& outY)
     return(ok);
 }
 
-int VizGeorefSpline2D::delete_point(const double Px, const double Py )
+int ThinPlateSpline::delete_point(const double Px, const double Py )
 {
     for ( int i = 0; i < _nof_points; i++ )
     {
@@ -252,14 +252,14 @@ int VizGeorefSpline2D::delete_point(const double Px, const double Py )
                     rhs[k][j+3] = rhs[k][j+3+1];
             }
             _nof_points--;
-            type = VIZ_GEOREF_SPLINE_POINT_WAS_DELETED;
+            type = THINPLATE_SPLINE_POINT_WAS_DELETED;
             return(1);
         }
     }
     return(0);
 }
 
-int VizGeorefSpline2D::solve(void)
+int ThinPlateSpline::solve(void)
 {
     int r, c, v;
     int p;
@@ -267,14 +267,14 @@ int VizGeorefSpline2D::solve(void)
     //	No points at all
     if ( _nof_points < 1 )
     {
-        type = VIZ_GEOREF_SPLINE_ZERO_POINTS;
+        type = THINPLATE_SPLINE_ZERO_POINTS;
         return(0);
     }
 
     // Only one point
     if ( _nof_points == 1 )
     {
-        type = VIZ_GEOREF_SPLINE_ONE_POINT;
+        type = THINPLATE_SPLINE_ONE_POINT;
         return(1);
     }
     // Just 2 points - it is necessarily 1D case
@@ -286,7 +286,7 @@ int VizGeorefSpline2D::solve(void)
         _dx *= fact;
         _dy *= fact;
 
-        type = VIZ_GEOREF_SPLINE_TWO_POINTS;
+        type = THINPLATE_SPLINE_TWO_POINTS;
         return(2);
     }
 
@@ -326,7 +326,7 @@ int VizGeorefSpline2D::solve(void)
     {
         int p1;
 
-        type = VIZ_GEOREF_SPLINE_ONE_DIMENSIONAL;
+        type = THINPLATE_SPLINE_ONE_DIMENSIONAL;
 
         _dx = _nof_points * sumx2 - sumx * sumx;
         _dy = _nof_points * sumy2 - sumy * sumy;
@@ -364,7 +364,7 @@ int VizGeorefSpline2D::solve(void)
         return(3);
     }
 
-    type = VIZ_GEOREF_SPLINE_FULL;
+    type = THINPLATE_SPLINE_FULL;
     // Make the necessary memory allocations
     if ( _AA )
         free(_AA);
@@ -400,7 +400,7 @@ int VizGeorefSpline2D::solve(void)
                 A(c+3,r+3 ) = A(r+3,c+3);
         }
 
-#if VIZ_GEOREF_SPLINE_DEBUG
+#if THINPLATE_SPLINE_DEBUG
 
     for ( r = 0; r < _nof_eqs; r++ )
     {
@@ -432,7 +432,7 @@ int VizGeorefSpline2D::solve(void)
     return(4);
 }
 
-int VizGeorefSpline2D::get_point( const double Px, const double Py, double *vars )
+int ThinPlateSpline::get_point( const double Px, const double Py, double *vars )
 {
 	int v, r;
 	double tmp, Pu;
@@ -441,20 +441,20 @@ int VizGeorefSpline2D::get_point( const double Px, const double Py, double *vars
 
 	switch ( type )
 	{
-	case VIZ_GEOREF_SPLINE_ZERO_POINTS :
+	case THINPLATE_SPLINE_ZERO_POINTS :
 		for ( v = 0; v < _nof_vars; v++ )
 			vars[v] = 0.0;
 		break;
-	case VIZ_GEOREF_SPLINE_ONE_POINT :
+	case THINPLATE_SPLINE_ONE_POINT :
 		for ( v = 0; v < _nof_vars; v++ )
 			vars[v] = rhs[v][3];
 		break;
-	case VIZ_GEOREF_SPLINE_TWO_POINTS :
+	case THINPLATE_SPLINE_TWO_POINTS :
 		fact = _dx * ( Px - x[0] ) + _dy * ( Py - y[0] );
 		for ( v = 0; v < _nof_vars; v++ )
 			vars[v] = ( 1 - fact ) * rhs[v][3] + fact * rhs[v][4];
 		break;
-	case VIZ_GEOREF_SPLINE_ONE_DIMENSIONAL :
+	case THINPLATE_SPLINE_ONE_DIMENSIONAL :
 		Pu = _dx * ( Px - x[0] ) + _dy * ( Py - y[0] );
 		if ( Pu <= u[index[0]] )
 		{
@@ -482,7 +482,7 @@ int VizGeorefSpline2D::get_point( const double Px, const double Py, double *vars
 			vars[v] = ( 1.0 - fact ) * rhs[v][leftP+3] +
 			fact * rhs[v][rightP+3];
 		break;
-	case VIZ_GEOREF_SPLINE_FULL :
+	case THINPLATE_SPLINE_FULL :
 		for ( v = 0; v < _nof_vars; v++ )
 			vars[v] = coef[v][0] + coef[v][1] * Px + coef[v][2] * Py;
 
@@ -493,14 +493,14 @@ int VizGeorefSpline2D::get_point( const double Px, const double Py, double *vars
 				vars[v] += coef[v][r+3] * tmp;
 		}
 		break;
-	case VIZ_GEOREF_SPLINE_POINT_WAS_ADDED :
+	case THINPLATE_SPLINE_POINT_WAS_ADDED :
 		fprintf(stderr, " A point was added after the last solve\n");
 		fprintf(stderr, " NO interpolation - return values are zero\n");
 		for ( v = 0; v < _nof_vars; v++ )
 			vars[v] = 0.0;
 		return(0);
 		break;
-	case VIZ_GEOREF_SPLINE_POINT_WAS_DELETED :
+	case THINPLATE_SPLINE_POINT_WAS_DELETED :
 		fprintf(stderr, " A point was deleted after the last solve\n");
 		fprintf(stderr, " NO interpolation - return values are zero\n");
 		for ( v = 0; v < _nof_vars; v++ )
@@ -514,7 +514,7 @@ int VizGeorefSpline2D::get_point( const double Px, const double Py, double *vars
 	return(1);
 }
 
-double VizGeorefSpline2D::base_func( const double x1, const double y1,
+double ThinPlateSpline::base_func( const double x1, const double y1,
 						  const double x2, const double y2 )
 {
 	if ( ( x1 == x2 ) && (y1 == y2 ) )
@@ -525,16 +525,16 @@ double VizGeorefSpline2D::base_func( const double x1, const double y1,
 	return dist * log( dist );
 }
 
-int VizGeorefSpline2D::serialize_size() 
+int ThinPlateSpline::serialize_size() 
 {
     int  i_size     = sizeof(int);
-    int  v_size     = sizeof(vizGeorefInterType);
+    int  v_size     = sizeof(ThinPlateSplineInterType);
     int  d_size     = sizeof(double);
 
     int  alloc_size = i_size * 5 + v_size + d_size * 5;
     int  p_num      = _max_nof_points + 3;
     int  is_aa      = 0;
-    alloc_size      = alloc_size + ( i_size * 2 + d_size * ( 3 + VIZGEOREF_MAX_VARS * 2 ) ) * p_num;
+    alloc_size      = alloc_size + ( i_size * 2 + d_size * ( 3 + THINPLATE_SPLINE_MAX_VARS * 2 ) ) * p_num;
     int  a_num      = _nof_eqs * _nof_eqs;
     if (_AA) {
         alloc_size  = alloc_size + ( d_size * a_num * 2 );
@@ -543,10 +543,10 @@ int VizGeorefSpline2D::serialize_size()
     return alloc_size;
 }
 
-char* VizGeorefSpline2D::serialize(char* serial) 
+char* ThinPlateSpline::serialize(char* serial) 
 {
     int  i_size     = sizeof(int);
-    int  v_size     = sizeof(vizGeorefInterType);
+    int  v_size     = sizeof(ThinPlateSplineInterType);
     int  d_size     = sizeof(double);
     int  alloc_size = serialize_size();
     int  p_num      = _max_nof_points + 3;
@@ -587,7 +587,7 @@ char* VizGeorefSpline2D::serialize(char* serial)
         memcpy(work + d_size * 2, &u[i],        d_size);
         work        = work + d_size * 3;
         
-        for (int j=0;j<VIZGEOREF_MAX_VARS;j++) {
+        for (int j=0;j<THINPLATE_SPLINE_MAX_VARS;j++) {
             memcpy(work,          &rhs[j][i],   d_size);
             memcpy(work + d_size, &coef[j][i],  d_size);
             work        = work + d_size * 2; 
@@ -605,10 +605,10 @@ char* VizGeorefSpline2D::serialize(char* serial)
     return work;
 }
 
-char* VizGeorefSpline2D::deserialize(char* serial) 
+char* ThinPlateSpline::deserialize(char* serial) 
 {
     int  i_size     = sizeof(int);
-    int  v_size     = sizeof(vizGeorefInterType);
+    int  v_size     = sizeof(ThinPlateSplineInterType);
     int  d_size     = sizeof(double);
     int  is_aa;
 
@@ -625,7 +625,7 @@ char* VizGeorefSpline2D::deserialize(char* serial)
     free( u );
     free( unused );
     free( index );
-    for ( int i = 0; i < VIZGEOREF_MAX_VARS; i++ )
+    for ( int i = 0; i < THINPLATE_SPLINE_MAX_VARS; i++ )
     {
         free( rhs[i] );
         free( coef[i] );
@@ -654,7 +654,7 @@ char* VizGeorefSpline2D::deserialize(char* serial)
 
     int  alloc_size = i_size * 5 + v_size + d_size * 5;
     int  p_num      = _max_nof_points + 3;
-    alloc_size      = alloc_size + ( i_size * 2 + d_size * ( 3 + VIZGEOREF_MAX_VARS * 2 ) ) * p_num;
+    alloc_size      = alloc_size + ( i_size * 2 + d_size * ( 3 + THINPLATE_SPLINE_MAX_VARS * 2 ) ) * p_num;
     int  a_num      = _nof_eqs * _nof_eqs;
     if (is_aa) {
         alloc_size  = alloc_size + ( d_size * a_num * 2 );
@@ -665,7 +665,7 @@ char* VizGeorefSpline2D::deserialize(char* serial)
     u      = (double *) malloc( d_size * p_num );
     unused = (int *)    malloc( i_size * p_num );
     index  = (int *)    malloc( i_size * p_num );
-    for ( int i = 0; i < VIZGEOREF_MAX_VARS; i++ )
+    for ( int i = 0; i < THINPLATE_SPLINE_MAX_VARS; i++ )
     {
         rhs[i]  = (double *) calloc( d_size, p_num );
         coef[i] = (double *) calloc( d_size, p_num );
@@ -681,7 +681,7 @@ char* VizGeorefSpline2D::deserialize(char* serial)
         memcpy(&u[i],        work + d_size * 2, d_size);
         work        = work + d_size * 3;
         
-        for (int j=0;j<VIZGEOREF_MAX_VARS;j++) {
+        for (int j=0;j<THINPLATE_SPLINE_MAX_VARS;j++) {
             memcpy(&rhs[j][i],  work,          d_size);
             memcpy(&coef[j][i], work + d_size, d_size);
             work        = work + d_size * 2; 
@@ -838,13 +838,13 @@ int matrixInvert( int N, double input[], double output[] )
 }
 
 /*EMSCRIPTEN_BINDINGS(thinplatespline) {
-    emscripten::class_<VizGeorefSpline2D>("_TPS")
+    emscripten::class_<ThinPlateSpline>("_TPS")
         .constructor<int>()
-        .function("add_point", &VizGeorefSpline2D::add_point, emscripten::allow_raw_pointers())
-        .function("solve", &VizGeorefSpline2D::solve)
-        .function("get_point", &VizGeorefSpline2D::get_point, emscripten::allow_raw_pointers())
-        .function("serialize_size", &VizGeorefSpline2D::serialize_size)
-        .function("serialize", &VizGeorefSpline2D::serialize, emscripten::allow_raw_pointers())
-        .function("deserialize", &VizGeorefSpline2D::deserialize, emscripten::allow_raw_pointers())
+        .function("add_point", &ThinPlateSpline::add_point, emscripten::allow_raw_pointers())
+        .function("solve", &ThinPlateSpline::solve)
+        .function("get_point", &ThinPlateSpline::get_point, emscripten::allow_raw_pointers())
+        .function("serialize_size", &ThinPlateSpline::serialize_size)
+        .function("serialize", &ThinPlateSpline::serialize, emscripten::allow_raw_pointers())
+        .function("deserialize", &ThinPlateSpline::deserialize, emscripten::allow_raw_pointers())
         ;
 }*/
