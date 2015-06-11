@@ -224,7 +224,7 @@ static void SWIGUNUSED SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpExcepti
 #ifdef __cplusplus
 extern "C" 
 #endif
-SWIGEXPORT void SWIGSTDCALL SWIGRegisterExceptionCallbacks_ThinPlateSpline(
+SWIGEXPORT void SWIGSTDCALL SWIGRegisterExceptionCallbacks_ThinPlateSplineConst(
                                                 SWIG_CSharpExceptionCallback_t applicationCallback,
                                                 SWIG_CSharpExceptionCallback_t arithmeticCallback,
                                                 SWIG_CSharpExceptionCallback_t divideByZeroCallback, 
@@ -252,7 +252,7 @@ SWIGEXPORT void SWIGSTDCALL SWIGRegisterExceptionCallbacks_ThinPlateSpline(
 #ifdef __cplusplus
 extern "C" 
 #endif
-SWIGEXPORT void SWIGSTDCALL SWIGRegisterExceptionArgumentCallbacks_ThinPlateSpline(
+SWIGEXPORT void SWIGSTDCALL SWIGRegisterExceptionArgumentCallbacks_ThinPlateSplineConst(
                                                 SWIG_CSharpExceptionArgumentCallback_t argumentCallback,
                                                 SWIG_CSharpExceptionArgumentCallback_t argumentNullCallback,
                                                 SWIG_CSharpExceptionArgumentCallback_t argumentOutOfRangeCallback) {
@@ -270,7 +270,7 @@ static SWIG_CSharpStringHelperCallback SWIG_csharp_string_callback = NULL;
 #ifdef __cplusplus
 extern "C" 
 #endif
-SWIGEXPORT void SWIGSTDCALL SWIGRegisterStringCallback_ThinPlateSpline(SWIG_CSharpStringHelperCallback callback) {
+SWIGEXPORT void SWIGSTDCALL SWIGRegisterStringCallback_ThinPlateSplineConst(SWIG_CSharpStringHelperCallback callback) {
   SWIG_csharp_string_callback = callback;
 }
 
@@ -293,6 +293,288 @@ SWIGEXPORT int SWIGSTDCALL CSharp_THINPLATE_SPLINE_MAX_VARS_get() {
   
   result = (int)(2);
   jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_new_ThinPlateSpline__SWIG_0(int jarg1) {
+  void * jresult ;
+  int arg1 ;
+  ThinPlateSpline *result = 0 ;
+  
+  arg1 = (int)jarg1; 
+  result = (ThinPlateSpline *)new ThinPlateSpline(arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_new_ThinPlateSpline__SWIG_1() {
+  void * jresult ;
+  ThinPlateSpline *result = 0 ;
+  
+  result = (ThinPlateSpline *)new ThinPlateSpline();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_delete_ThinPlateSpline(void * jarg1) {
+  ThinPlateSpline *arg1 = (ThinPlateSpline *) 0 ;
+  
+  arg1 = (ThinPlateSpline *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_ThinPlateSpline_get_nof_points(void * jarg1) {
+  int jresult ;
+  ThinPlateSpline *arg1 = (ThinPlateSpline *) 0 ;
+  int result;
+  
+  arg1 = (ThinPlateSpline *)jarg1; 
+  result = (int)(arg1)->get_nof_points();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_ThinPlateSpline_get_object_size() {
+  int jresult ;
+  int result;
+  
+  result = (int)ThinPlateSpline::get_object_size();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_ThinPlateSpline_set_toler(void * jarg1, double jarg2, double jarg3) {
+  ThinPlateSpline *arg1 = (ThinPlateSpline *) 0 ;
+  double arg2 ;
+  double arg3 ;
+  
+  arg1 = (ThinPlateSpline *)jarg1; 
+  arg2 = (double)jarg2; 
+  arg3 = (double)jarg3; 
+  (arg1)->set_toler(arg2,arg3);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_ThinPlateSpline_get_toler(void * jarg1, void * jarg2, void * jarg3) {
+  ThinPlateSpline *arg1 = (ThinPlateSpline *) 0 ;
+  double *arg2 = 0 ;
+  double *arg3 = 0 ;
+  
+  arg1 = (ThinPlateSpline *)jarg1; 
+  arg2 = (double *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "double & type is null", 0);
+    return ;
+  } 
+  arg3 = (double *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "double & type is null", 0);
+    return ;
+  } 
+  (arg1)->get_toler(*arg2,*arg3);
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_ThinPlateSpline_get_interpolation_type(void * jarg1) {
+  int jresult ;
+  ThinPlateSpline *arg1 = (ThinPlateSpline *) 0 ;
+  ThinPlateSplineInterType result;
+  
+  arg1 = (ThinPlateSpline *)jarg1; 
+  result = (ThinPlateSplineInterType)(arg1)->get_interpolation_type();
+  jresult = (int)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_ThinPlateSpline_dump_data_points(void * jarg1) {
+  ThinPlateSpline *arg1 = (ThinPlateSpline *) 0 ;
+  
+  arg1 = (ThinPlateSpline *)jarg1; 
+  (arg1)->dump_data_points();
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_ThinPlateSpline_delete_list(void * jarg1) {
+  int jresult ;
+  ThinPlateSpline *arg1 = (ThinPlateSpline *) 0 ;
+  int result;
+  
+  arg1 = (ThinPlateSpline *)jarg1; 
+  result = (int)(arg1)->delete_list();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_ThinPlateSpline_grow_points(void * jarg1) {
+  ThinPlateSpline *arg1 = (ThinPlateSpline *) 0 ;
+  
+  arg1 = (ThinPlateSpline *)jarg1; 
+  (arg1)->grow_points();
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_ThinPlateSpline_add_point(void * jarg1, double jarg2, double jarg3, void * jarg4) {
+  int jresult ;
+  ThinPlateSpline *arg1 = (ThinPlateSpline *) 0 ;
+  double arg2 ;
+  double arg3 ;
+  double *arg4 = (double *) 0 ;
+  int result;
+  
+  arg1 = (ThinPlateSpline *)jarg1; 
+  arg2 = (double)jarg2; 
+  arg3 = (double)jarg3; 
+  arg4 = (double *)jarg4; 
+  result = (int)(arg1)->add_point(arg2,arg3,(double const *)arg4);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_ThinPlateSpline_delete_point(void * jarg1, double jarg2, double jarg3) {
+  int jresult ;
+  ThinPlateSpline *arg1 = (ThinPlateSpline *) 0 ;
+  double arg2 ;
+  double arg3 ;
+  int result;
+  
+  arg1 = (ThinPlateSpline *)jarg1; 
+  arg2 = (double)jarg2; 
+  arg3 = (double)jarg3; 
+  result = (int)(arg1)->delete_point(arg2,arg3);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_ThinPlateSpline_get_point(void * jarg1, double jarg2, double jarg3, void * jarg4) {
+  int jresult ;
+  ThinPlateSpline *arg1 = (ThinPlateSpline *) 0 ;
+  double arg2 ;
+  double arg3 ;
+  double *arg4 = (double *) 0 ;
+  int result;
+  
+  arg1 = (ThinPlateSpline *)jarg1; 
+  arg2 = (double)jarg2; 
+  arg3 = (double)jarg3; 
+  arg4 = (double *)jarg4; 
+  result = (int)(arg1)->get_point(arg2,arg3,arg4);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_ThinPlateSpline_get_xy(void * jarg1, int jarg2, void * jarg3, void * jarg4) {
+  unsigned int jresult ;
+  ThinPlateSpline *arg1 = (ThinPlateSpline *) 0 ;
+  int arg2 ;
+  double *arg3 = 0 ;
+  double *arg4 = 0 ;
+  bool result;
+  
+  arg1 = (ThinPlateSpline *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (double *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "double & type is null", 0);
+    return 0;
+  } 
+  arg4 = (double *)jarg4;
+  if (!arg4) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "double & type is null", 0);
+    return 0;
+  } 
+  result = (bool)(arg1)->get_xy(arg2,*arg3,*arg4);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_ThinPlateSpline_change_point(void * jarg1, int jarg2, double jarg3, double jarg4, void * jarg5) {
+  unsigned int jresult ;
+  ThinPlateSpline *arg1 = (ThinPlateSpline *) 0 ;
+  int arg2 ;
+  double arg3 ;
+  double arg4 ;
+  double *arg5 = (double *) 0 ;
+  bool result;
+  
+  arg1 = (ThinPlateSpline *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (double)jarg3; 
+  arg4 = (double)jarg4; 
+  arg5 = (double *)jarg5; 
+  result = (bool)(arg1)->change_point(arg2,arg3,arg4,arg5);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_ThinPlateSpline_reset(void * jarg1) {
+  ThinPlateSpline *arg1 = (ThinPlateSpline *) 0 ;
+  
+  arg1 = (ThinPlateSpline *)jarg1; 
+  (arg1)->reset();
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_ThinPlateSpline_solve(void * jarg1) {
+  int jresult ;
+  ThinPlateSpline *arg1 = (ThinPlateSpline *) 0 ;
+  int result;
+  
+  arg1 = (ThinPlateSpline *)jarg1; 
+  result = (int)(arg1)->solve();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_ThinPlateSpline_serialize_size(void * jarg1) {
+  int jresult ;
+  ThinPlateSpline *arg1 = (ThinPlateSpline *) 0 ;
+  int result;
+  
+  arg1 = (ThinPlateSpline *)jarg1; 
+  result = (int)(arg1)->serialize_size();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT char * SWIGSTDCALL CSharp_ThinPlateSpline_serialize(void * jarg1, char * jarg2) {
+  char * jresult ;
+  ThinPlateSpline *arg1 = (ThinPlateSpline *) 0 ;
+  char *arg2 = (char *) 0 ;
+  char *result = 0 ;
+  
+  arg1 = (ThinPlateSpline *)jarg1; 
+  arg2 = (char *)jarg2; 
+  result = (char *)(arg1)->serialize(arg2);
+  jresult = SWIG_csharp_string_callback((const char *)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT char * SWIGSTDCALL CSharp_ThinPlateSpline_deserialize(void * jarg1, char * jarg2) {
+  char * jresult ;
+  ThinPlateSpline *arg1 = (ThinPlateSpline *) 0 ;
+  char *arg2 = (char *) 0 ;
+  char *result = 0 ;
+  
+  arg1 = (ThinPlateSpline *)jarg1; 
+  arg2 = (char *)jarg2; 
+  result = (char *)(arg1)->deserialize(arg2);
+  jresult = SWIG_csharp_string_callback((const char *)result); 
   return jresult;
 }
 

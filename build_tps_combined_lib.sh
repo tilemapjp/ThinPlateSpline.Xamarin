@@ -25,7 +25,8 @@ mkdir -p ${AND_DIST}
 
 #for swig
 
-swig -c++ -csharp swig/ThinPlateSpline.i
+swig -c++ -csharp -namespace TilemapJP -dllimport thinplatespline swig/ThinPlateSpline.i
+mv swig/*.cs ThinPlateSpline.Shared/.
 
 #for iOS
 

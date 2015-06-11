@@ -39,7 +39,5 @@ android-*-toolchain-*
 *.tar.gz
 
 # Xamarin
-GDAL*/obj/
-GDAL*/bin/
-OSGeo.GDAL*/obj/
-OSGeo.GDAL*/bin/
+ThinPLateSpline*/obj/
+ThinPlateSpline*/bin/

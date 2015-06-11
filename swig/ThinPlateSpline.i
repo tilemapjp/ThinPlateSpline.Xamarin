@@ -1,4 +1,4 @@
-%module ThinPlateSpline
+%module ThinPlateSplineConst
 %{
 #include "tps_c/thinplatespline.h"
 %}
